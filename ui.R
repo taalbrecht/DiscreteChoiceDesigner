@@ -10,8 +10,12 @@ library(nlme)
 library(MultiEqOptimizer)
 library(corrplot)
 library(plotly)
+library(shinyjs)
 
 shinyUI(fluidPage(
+  
+  #Use shinyjs to allow for advanced UI functionality
+  useShinyjs(),
 
   # Application title
   titlePanel("Discrete Choice Experiment Planner"),
@@ -139,46 +143,12 @@ shinyUI(fluidPage(
            #Sidebar for optimization controls
            sidebarPanel(
              
-#              #Options for Basic Model Creation
-#              h3("Basic Model Creation"),
-#              
-#              #Specify the number of model points
-#              numericInput(inputId = "modelquestions", label = "Number of Questions Per Survey", value = 1, min = 1),
-#              
-#              #Specify the number of alternatives per question
-#              numericInput(inputId = "alternatives", label = "Number of Choices Per Question", value = 2, min = 1),
-#              
-#              #Specify whether an opt-out should be included
-#              checkboxInput(inputId = "optout", label = "Include Opt-Out Alternative (i.e. 'None of the Above')", value = FALSE),
-#              
-#              #Specify number of blocks
-#              numericInput(inputId = "blocks", label = "Number of Different Surveys", value = 1, min = 1),
-#              
-#              #Specify model search procedure. Add Gibbs later once it has been implemented
-#              selectInput(inputId = "searchstrat", label = "Model Searching Strategy", choices = c("Federov"), selected = "Federov"),
-#              
-#              #Specify number of random starts
-#              numericInput(inputId = "randomstarts", label = "Number of Random Starts to Find Design", value = 1, min = 1),
-#              
-#              #Action button to run design
-#              actionButton(inputId = "createsingledesignbutton", label = "Create Design"),
-             
-             
              #Options for searching across several design sizes
              
              h3("Search Across Different Model Sizes"),
              
-             #Specify the number of model points
-#              numericInput(inputId = "minmodelquestions", label = "Minimum Number of Questions Per Survey", value = 1, min = 1),
-#              numericInput(inputId = "maxmodelquestions", label = "Maximum Number of Questions Per Survey", value = 2, min = 1),
-             
              textInput(inputId = paste0("questionnumlist"), label = "List of Number of Questions Per Survey. Separate Multiple Values With a Comma and Space"),
              
-             #Specify the number of alternatives per question
-             # numericInput(inputId = "minalternatives", label = "Minimum Number of Choices Per Question", value = 2, min = 1),
-             
-             #Specify the number of alternatives per question
-             # numericInput(inputId = "maxalternatives", label = "Maximum Number of Choices Per Question", value = 2, min = 1),
              
              textInput(inputId = paste0("altnumlist"), label = "List of Number of Choices Per Question. Separate Multiple Values With a Comma and Space"),
              

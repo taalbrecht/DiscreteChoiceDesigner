@@ -10,6 +10,7 @@ library(nlme)
 library(MultiEqOptimizer)
 library(corrplot)
 library(plotly)
+library(shinyjs)
 
 shinyServer(function(input, output) {
 
@@ -575,6 +576,10 @@ shinyServer(function(input, output) {
     #Isolate main modeling loop to prevent code from running unless run model button is pressed
     isolate({
 
+      #Disable design creation buttons while code runs
+      disable("createsingledesignbutton")
+      disable("searchdesignsbutton")
+      
       #Get model prep details
       modelprep <- modelprep()
       
@@ -633,6 +638,10 @@ shinyServer(function(input, output) {
         #Select best model
         optmodel <- optmodel[[which.max(sapply(optmodel, "[[", "ObjectiveFunction"))]]
       
+        #Enable design creation buttons while code runs
+        enable("createsingledesignbutton")
+        enable("searchdesignsbutton")
+        
     })
     
   }
@@ -657,6 +666,10 @@ shinyServer(function(input, output) {
     }else{
       #Isolate main modeling loop to prevent code from running unless run model button is pressed
       isolate({
+        
+        #Disable design creation buttons while code runs
+        disable("createsingledesignbutton")
+        disable("searchdesignsbutton")
         
         #Get model prep details
         modelprep <- modelprep()
@@ -733,6 +746,10 @@ shinyServer(function(input, output) {
         modellist[[i]] <- optmodel
         
         }
+        
+        #Enable design creation buttons while code runs
+        enable("createsingledesignbutton")
+        enable("searchdesignsbutton")
         
       })
       
