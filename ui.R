@@ -71,35 +71,22 @@ shinyUI(fluidPage(
              checkboxInput(inputId = "optout", label = "Include Opt-Out Alternative (i.e. 'None of the Above')", value = FALSE),
              
              #Specify number of blocks
-             numericInput(inputId = "blocks", label = "Number of Different Surveys", value = 1, min = 1),
+             tags$div(title = "Block the survey into a number of different surveys. This is useful if you need a large number of different questions that exceeds the number of questions that can be reliably answered by a single respondant.",
+                      numericInput(inputId = "blocks", label = "Number of Different Surveys", value = 1, min = 1)),
            
              #Specify model search procedure. Add Gibbs later once it has been implemented
-             selectInput(inputId = "searchstrat", label = "Model Searching Strategy", choices = c("Federov", "Gibbs"), selected = "Federov"),
+             tags$div(title = "The model searching strategy. Fedorov may take longer than Gibbs for a large number of variables but typically finds more efficient designs.",
+                      selectInput(inputId = "searchstrat", label = "Model Searching Strategy", choices = c("Federov", "Gibbs"), selected = "Federov")),
              
              #Specify number of random starts
-             numericInput(inputId = "randomstarts", label = "Number of Random Starts to Find Design", value = 1, min = 1),
+             tags$div(title = "Increasing the number of random starts helps the optimizer avoid local minima and maxima.",
+                      numericInput(inputId = "randomstarts", label = "Number of Random Starts to Find Design", value = 3, min = 1)),
              
              #Action button to run design
              actionButton(inputId = "createsingledesignbutton", label = "Create Design"),
              
              
-#              #Options for searching across several design sizes
-#              
-#              h3("Search Across Different Model Sizes"),
-#              
-#              #Specify the number of model points
-#              numericInput(inputId = "minmodelquestions", label = "Minimum Number of Questions Per Survey", value = 1, min = 1),
-#              numericInput(inputId = "maxmodelquestions", label = "Maximum Number of Questions Per Survey", value = 2, min = 1),
-#              
-#              #Specify the number of alternatives per question
-#              numericInput(inputId = "minalternatives", label = "Minimum Number of Choices Per Question", value = 2, min = 1),
-#              
-#              #Specify the number of alternatives per question
-#              numericInput(inputId = "maxalternatives", label = "Maximum Number of Choices Per Question", value = 2, min = 1),
-#              
-#              #Action button to run design
-#              actionButton(inputId = "searchdesignsbutton", label = "Search for Designs"),
-             
+
              #Options for Advanced Model Creation
              h3("Advanced Options (May Leave Unchanged)"),
              
@@ -120,7 +107,8 @@ shinyUI(fluidPage(
              
              
              #Display correlation plot selector of variables for each model
-             uiOutput("ui_corrplotselect"),
+             tags$div(title = "Select the formula to show the corresponding correlation plot for the predictor variables. Correlations closer to 0 are better.",
+                      uiOutput("ui_corrplotselect")),
              
              #Display correlation plot
              plotOutput("out_corrplot"),
@@ -133,12 +121,14 @@ shinyUI(fluidPage(
              
              #Display power and sample size table
              hr(),
-             h3("Power and Required Sample Sizes"),
+             tags$div(title = "This table lists the required number of respondants to get the power desired to estimate model effects.",
+                      h3("Power and Required Sample Sizes")),
              tableOutput("out_samplesizesingle"),
              
              #Display final model matrix
              hr(),
-             h3("Design Matrix"),
+             tags$div(title = "This table shows the final survey design to use. Question number is shown in the first column. Randomization of question order when administering the survey is typically recommended.",
+                      h3("Design Matrix")),
              tableOutput("out_modelmatrix")
              
            )
@@ -196,13 +186,16 @@ shinyUI(fluidPage(
              checkboxInput(inputId = "optoutmulti", label = "Include Opt-Out Alternative (i.e. 'None of the Above')", value = FALSE),
              
              #Specify number of blocks
-             numericInput(inputId = "blocksmulti", label = "Number of Different Surveys", value = 1, min = 1),
+tags$div(title = "Block the survey into a number of different surveys. This is useful if you need a large number of different questions that exceeds the number of questions that can be reliably answered by a single respondant.",
+         numericInput(inputId = "blocksmulti", label = "Number of Different Surveys", value = 1, min = 1)),
              
              #Specify model search procedure. Add Gibbs later once it has been implemented
-             selectInput(inputId = "searchstratmulti", label = "Model Searching Strategy", choices = c("Federov", "Gibbs"), selected = "Federov"),
+tags$div(title = "The model searching strategy. Fedorov may take longer than Gibbs for a large number of variables but typically finds more efficient designs.",
+         selectInput(inputId = "searchstratmulti", label = "Model Searching Strategy", choices = c("Federov", "Gibbs"), selected = "Federov")),
              
              #Specify number of random starts
-             numericInput(inputId = "randomstartsmulti", label = "Number of Random Starts to Find Design", value = 1, min = 1),
+tags$div(title = "Increasing the number of random starts helps the optimizer avoid local minima and maxima.",
+         numericInput(inputId = "randomstartsmulti", label = "Number of Random Starts to Find Design", value = 3, min = 1)),
              
              #Action button to run design
              actionButton(inputId = "searchdesignsbutton", label = "Search for Designs"),
@@ -225,18 +218,21 @@ shinyUI(fluidPage(
            mainPanel(
              
              #Display correlation plot selector of variables for each model
-             uiOutput("ui_effplotselect"),
+             tags$div(title = "Select the formula to use for all of the plots and diagnostics below.",
+                      uiOutput("ui_effplotselect")),
              
              #Display model efficiency plot
              hr(),
-             h3("Model Efficiency Plot"),
+             tags$div(title = "Model d-efficiency. Higher numbers are better.",
+                      h3("Model Efficiency Plot")),
              plotlyOutput("out_effcontour_multi", height = "600px"),
              
              #Display correlation plot number of alternatives selector
              uiOutput("ui_corrmultiplotalt"),
              
              #Display correlation plot based on selected formula and number of alternatives
-             h3("Correlation of Variables"),
+             tags$div(title = "Correlations closer to 0 are better.",
+                      h3("Correlation of Variables")),
              plotlyOutput("out_effcorr_multi", height = "600px"),
              
              #Display number of required samples based on selected formula and number of alternatives

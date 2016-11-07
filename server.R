@@ -34,7 +34,8 @@ shinyServer(function(input, output) {
     varnums <- as.integer(input$varnums)
     
     outlist <- lapply(1:varnums, function(i) {
-      textInput(inputId = paste0("varname", i), label = "Name")
+      tags$div(title = "Accepts a continuous string of letters. Must match variable names used in formulas below.",
+               textInput(inputId = paste0("varname", i), label = "Name"))
     })
     
     return(outlist)
@@ -72,7 +73,8 @@ shinyServer(function(input, output) {
       #Set input parameters for attribute variables
       if(input[[paste0("vartype", i)]] == "Attribute"){
 
-        outlist[[i]] <- textInput(inputId = paste0("levnames", i), label = "Level Names")
+        outlist[[i]] <- tags$div(title = "Names of each variable level. Separate each level name with a comma followed by a space. E.g: Low, High",
+                                 textInput(inputId = paste0("levnames", i), label = "Level Names"))
         
         }
       
@@ -99,7 +101,8 @@ shinyServer(function(input, output) {
   output$ui_modelnames <- renderUI({
     modelnums <- as.integer(input$modelnums)
     lapply(1:modelnums, function(i) {
-      textInput(inputId = paste0("modelname", i), label = "Name")
+      tags$div(title = "This model name will be used as label on the analysis tabs",
+               textInput(inputId = paste0("modelname", i), label = "Name"))
     })
   })
   
@@ -107,7 +110,8 @@ shinyServer(function(input, output) {
   output$ui_modelformulas <- renderUI({
     modelnums <- as.integer(input$modelnums)
     lapply(1:modelnums, function(i) {
-      textInput(inputId = paste0("modelformula", i), label = "Model Formula")
+      tags$div(title = "The model formula. Format is A+B+A*B... Individual variable names must match variable names defined above. To combine multiple variables into one term, surround the term formula with I(term). E.g.: I(A/B)",
+               textInput(inputId = paste0("modelformula", i), label = "Model Formula"))
     })
   })
   
@@ -115,7 +119,8 @@ shinyServer(function(input, output) {
   output$ui_modelweights <- renderUI({
     modelnums <- as.integer(input$modelnums)
     lapply(1:modelnums, function(i) {
-      textInput(inputId = paste0("modelweight", i), label = "Optimization Weight")
+      tags$div(title = "Weighting percentage used when optimizing study across multiple models. Higher weight values will place more importance on this formula when compared to the other formulas.",
+               textInput(inputId = paste0("modelweight", i), label = "Optimization Weight", value = 1/modelnums))
     })
   })
   
@@ -138,8 +143,10 @@ shinyServer(function(input, output) {
       for(j in 1:length(effectlist[[i]])){
       
         #outlist[[length(outlist)+1]] <- numericInput(inputId = paste0("modeleffects", i,j), label = effectlist[[i]][j], value = 0)
-        outlist[[length(outlist)+1]] <- list(column(6,numericInput(inputId = paste0("modeleffects", i,j), label = effectlist[[i]][j], value = 0)),
-                                             column(6,numericInput(inputId = paste0("effectdiffdetect", i,j), label = effectlist[[i]][j], value = 0)))
+        outlist[[length(outlist)+1]] <- list(column(6,tags$div(title = "Estimated size of the effect. Effect size is the natural log odds ratio which is calculated as the proportion of people selecting the highest setting of this variable divided by the proportion of people selecting the lowest level of this variable. If 70% of people would select the high level over the low level, the odds ratio would be ln(0.7/0.3) = 0.846",
+                                                             numericInput(inputId = paste0("modeleffects", i,j), label = effectlist[[i]][j], value = 0))),
+                                             column(6,tags$div(title = "The smallest effect size you would like to have enough samples to detect. A smaller value here translates to a larger required sample size",
+                                                               numericInput(inputId = paste0("effectdiffdetect", i,j), label = effectlist[[i]][j], value = 0))))
                                                     
     
     }
