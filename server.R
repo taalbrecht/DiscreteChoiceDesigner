@@ -326,6 +326,7 @@ shinyServer(function(input, output) {
     
     #Create plot data.frame
     plot.df <- data.frame(modelout$DesignParamFrame, modelout$DeffFrame, modelout$DeffvsOptim)
+    
     #colnames(plot.df) <- c(colnames(modelout$DesignParamFrame), c(paste0(formulanames, "Defficiency"), paste0(formulanames, ":D-Optimality")))
     
     plot.df <- plot.df[,c(1,2,(2+as.numeric(input$effplotmodel)))]
@@ -612,7 +613,12 @@ shinyServer(function(input, output) {
                            searchstyle = input$searchstrat)
         
         #Find maximum d-efficiencies to use as reference designs
-        determrefs <- apply(sapply(optmodel, "[[", "Deff"), MARGIN = 1, max)
+        if(length(modelprep$formulalist) > 1){
+          #Script for more than one formula
+          determrefs <- apply(sapply(optmodel, "[[", "Deff"), MARGIN = 1, max)
+          
+          #Script for one formula
+        }else{determrefs <- max(sapply(optmodel, "[[", "Deff"))}
         
         #Set zero determinants (from an insufficient model size) to a small positive number to allow for calculations to continue
         determrefs[determrefs == 0] <- 0.001
@@ -717,7 +723,12 @@ shinyServer(function(input, output) {
                             searchstyle = input$searchstratmulti))
           
           #Find maximum d-efficiencies to use as reference designs
-          determrefs <- apply(sapply(optmodel, "[[", "Deff"), MARGIN = 1, max)
+          if(length(modelprep$formulalist) > 1){
+            #Script for more than one formula
+            determrefs <- apply(sapply(optmodel, "[[", "Deff"), MARGIN = 1, max)
+            
+            #Script for one formula
+          }else{determrefs <- max(sapply(optmodel, "[[", "Deff"))}
           
           #Set zero determinants (from an insufficient model size) to a small positive number to allow for calculations to continue
           determrefs[determrefs == 0] <- 0.001
@@ -758,8 +769,8 @@ shinyServer(function(input, output) {
     return(list("DesignParamFrame" = searchparams,
                 "ModelFrameLists" = lapply(modellist, "[[", "ModelMatrix"),
                 "CovLists" = lapply(modellist, "[[", "CovList"),
-                "DeffFrame" = t(sapply(modellist, "[[", "Deff")),
-                "DeffvsOptimFrame" = t(sapply(modellist, "[[", "DeffvsOptimal")),
+                "DeffFrame" = if(length(modelprep$formulalist) > 1){t(sapply(modellist, "[[", "Deff"))}else{(sapply(modellist, "[[", "Deff"))},
+                "DeffvsOptimFrame" = if(length(modelprep$formulalist) > 1){t(sapply(modellist, "[[", "DeffvsOptimal"))}else{(sapply(modellist, "[[", "DeffvsOptimal"))},
                 "ObjectiveFunctionVector" = sapply(modellist, "[[", "ObjectiveFunction")))
     
   })
