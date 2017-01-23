@@ -131,6 +131,10 @@ shinyUI(fluidPage(
              
              #Display final model matrix
              hr(),
+             tags$div(title = "Save model matrix as csv file",
+                      textInput("ModelSaveName","File Name For Model Matrix:",value="ModelSaveName")),
+             tags$div(title = "Save model matrix as csv file",
+                      downloadButton("ModelSave","Download Model Matrix")),
              tags$div(title = "This table shows the final survey design to use. Question number is shown in the first column. Randomization of question order when administering the survey is typically recommended.",
                       h3("Design Matrix")),
              tableOutput("out_modelmatrix")

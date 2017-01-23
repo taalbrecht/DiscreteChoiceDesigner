@@ -305,6 +305,15 @@ shinyServer(function(input, output) {
     
   })
   
+  #Code to download model matrix
+  output$ModelSave<-downloadHandler(
+    filename = function(){paste(input$ModelSaveName,".csv",sep = "")},
+    content = function(file){
+      modelmat <- modeluserspec()[["ModelFrame"]]
+      #saved_api <- reactiveValuesToList(tmp)
+      write.csv(modelmat, file = file)
+    })
+  
   
   #Contour plot for design efficiencies for model search
   output$out_effcontour_multi <- renderPlotly({
